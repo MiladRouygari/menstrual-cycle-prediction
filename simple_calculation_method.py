@@ -28,6 +28,23 @@ def is_valid_date(date:str):
         raise ValueError("current_cycle_start_str must be in 'YYYY-MM-DD' format")
 
 
+def validate_cycle_length(cycle_length):
+    """
+    Validates that cycle_length is an integer between 21 and 35.
+
+    Parameters:
+        cycle_length (int): The menstrual cycle length to validate.
+
+    Raises:
+        TypeError: If cycle_length is not an integer.
+        ValueError: If cycle_length is not between 21 and 35.
+    """
+    if not isinstance(cycle_length, int):
+        raise TypeError("cycle_length must be an integer")
+    if not (21 <= cycle_length <= 35):
+        raise ValueError("cycle_length must be between 21 and 35 days")
+
+
 def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int):
     """
         Calculates and prints the phases of the menstrual cycle based on the start date and cycle length.
@@ -52,9 +69,7 @@ def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int):
     is_valid_date(current_cycle_start)
         
     # Validate cycle length 
-    if not (21 <= cycle_length <= 35):
-        raise ValueError("cycle_length must be between 21 and 35 days")
-
+    validate_cycle_length(cycle_length)
 
     # Parse the current cycle start date
     current_cycle_start = datetime.strptime(current_cycle_start, "%Y-%m-%d")
