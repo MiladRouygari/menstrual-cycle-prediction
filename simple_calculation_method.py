@@ -4,9 +4,9 @@ TODO:
 
 from datetime import datetime, timedelta
 
-now = datetime.now()
-print(now)
 # datetime original order is "%Y-%m-%d"
+now = datetime.now()
+print(f"Today's date is: {now}") 
 
 
 def is_valid_date(date:str):
@@ -25,10 +25,10 @@ def is_valid_date(date:str):
         datetime.strptime(date, "%Y-%m-%d")
         return True
     except ValueError:
-        raise ValueError("current_cycle_start_str must be in 'YYYY-MM-DD' format")
+        raise ValueError("current_cycle_start must be in 'YYYY-MM-DD' format")
 
 
-def validate_cycle_length(cycle_length):
+def is_valid_cycle_length(cycle_length):
     """
     Validates that cycle_length is an integer between 21 and 35.
 
@@ -45,7 +45,7 @@ def validate_cycle_length(cycle_length):
         raise ValueError("cycle_length must be between 21 and 35 days")
 
 
-def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int):
+def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int, luteal_length=14):
     """
         Calculates and prints the phases of the menstrual cycle based on the start date and cycle length.
 
@@ -58,18 +58,19 @@ def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int):
     Parameters:
         current_cycle_start (str): The start date of the current menstrual cycle, in 'YYYY-MM-DD' format.
         cycle_length (int): The total length of the cycle in days (must be between 21 and 35).
+        luteal_length: The Luteal phase duration 
     
     Returns:
-        print statemants determining the cycle phases (Follicular Phase, Ovulation Day, Luteal Phase)
+        print statemants determining the cycle phases beginning to end (Follicular Phase, Ovulation Day, Luteal Phase)
     
     """
 
     # Checking inputs
-    # Validate date format
+        # Validate date format
     is_valid_date(current_cycle_start)
         
-    # Validate cycle length 
-    validate_cycle_length(cycle_length)
+        # Validate cycle length 
+    is_valid_cycle_length(cycle_length)
 
     # Parse the current cycle start date
     current_cycle_start = datetime.strptime(current_cycle_start, "%Y-%m-%d")
@@ -77,9 +78,8 @@ def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int):
     # Next expected period
     next_cycle_start = current_cycle_start + timedelta(days=cycle_length)
 
-    LUTEAL_LENGTH=14
     # Ovulation day is 14 days before next period
-    ovulation_day = next_cycle_start - timedelta(days=LUTEAL_LENGTH)
+    ovulation_day = next_cycle_start - timedelta(days=luteal_length)
     
     # Follicular phase: from current cycle start to day before ovulation
     follicular_end = ovulation_day - timedelta(days=1)
@@ -95,4 +95,4 @@ def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int):
     print(f"Luteal Phase: {luteal_start.date()} to {luteal_end.date()}")
 
 # Example usage
-calculate_future_cycle_phases(current_cycle_start="2025-05-01", cycle_length=35)
+calculate_future_cycle_phases(current_cycle_start="2025-04-15", cycle_length=35)
