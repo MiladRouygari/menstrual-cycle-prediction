@@ -1,5 +1,31 @@
 """
 TODO:
+
+1. Standard Days method
+- days 8–19  as fertile days
+
+######
+
+2. Rhythm
+
+- Past six Cycle 
+- The fertile period is starting on day [x -18] and ending on day [y – 11], 
+- where x is the shortest and y is the longest number of days in a woman’s menstrual cycle. 
+
+######
+
+3. Alternative
+
+- The fertile days start on day (1/2x - 5) and last for (y – x + 8) days, 
+- where x is the shortest and y is the longest number of days in a woman’s menstrual cycle. 
+
+
+######
+
+4. Simple Calendar Method
+
+- Subtracts 14 and 15 days from the last cycle length to give the peak fertility days
+
 """
 
 from datetime import datetime, timedelta
@@ -45,6 +71,9 @@ def is_valid_cycle_length(cycle_length):
         raise ValueError("cycle_length must be between 21 and 35 days")
 
 
+
+
+
 def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int, luteal_length=14):
     """
         Calculates and prints the phases of the menstrual cycle based on the start date and cycle length.
@@ -79,13 +108,13 @@ def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int, lut
     next_cycle_start = current_cycle_start + timedelta(days=cycle_length)
 
     # Ovulation day is 14 days before next period
-    ovulation_day = next_cycle_start - timedelta(days=luteal_length)
+    ovulation_day = next_cycle_start - timedelta(days=luteal_length+1)
     
     # Follicular phase: from current cycle start to day before ovulation
     follicular_end = ovulation_day - timedelta(days=1)
     
     # Luteal phase: from ovulation to day before next cycle
-    luteal_start = ovulation_day
+    luteal_start = ovulation_day + timedelta(days=1)
     luteal_end = next_cycle_start - timedelta(days=1)
     
     # Print results
@@ -95,4 +124,4 @@ def calculate_future_cycle_phases(current_cycle_start:str, cycle_length:int, lut
     print(f"Luteal Phase: {luteal_start.date()} to {luteal_end.date()}")
 
 # Example usage
-calculate_future_cycle_phases(current_cycle_start="2025-04-15", cycle_length=35)
+calculate_future_cycle_phases(current_cycle_start="2025-04-01", cycle_length=21)
