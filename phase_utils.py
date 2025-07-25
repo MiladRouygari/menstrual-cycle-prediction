@@ -1,0 +1,97 @@
+def get_phase_day_ranges(cycle_length):
+
+    """
+    Divides a menstrual cycle into phase-specific day ranges based on the total cycle length.
+
+    The function splits the cycle into the following phases:
+        - EF (Early Follicular)
+        - LF (Late Follicular)
+        - OV (Ovulation)
+        - EL (Early Luteal)
+        - LL (Late Luteal)
+
+    Fixed durations:
+        - OV (Ovulation): 5 days
+        - EL (Early Luteal): 5 days
+        - LL (Late Luteal): 7 days
+
+    The remaining days (after allocating OV, EL, and LL) are flexibly distributed between EF and LF 
+    in a 7:4 ratio.
+
+    Parameters:
+        cycle_length (int): Total number of days in the cycle.
+
+    Returns:
+        dict: A dictionary mapping each phase name ('EF', 'LF', 'OV', 'EL', 'LL') 
+              to a corresponding range of days (1-indexed).
+
+    Example:
+        >>> get_phase_day_ranges(28)
+        {
+        'EF': range(1, 8),
+        'LF': range(8, 12),
+        'OV': range(12, 17),
+        'EL': range(17, 22),
+        'LL': range(22, 29),
+    }
+    """
+    # Fixed phase durations
+    ov_len = 5
+    el_len = 5
+    ll_len = 7
+    fixed_len = ov_len + el_len + ll_len
+
+    
+    # Flexible days go to EF and LF
+    flexible_len = cycle_length - fixed_len
+
+    # Split EF and LF in 7:4 ratio
+    ef_len = round(flexible_len * 7 / 11)
+    lf_len = flexible_len - ef_len
+
+    # Build the ranges step by step
+    ef_start = 1
+    ef_end = ef_start + ef_len - 1
+
+    lf_start = ef_end + 1
+    lf_end = lf_start + lf_len - 1
+
+    ov_start = lf_end + 1
+    ov_end = ov_start + ov_len - 1
+
+    el_start = ov_end + 1
+    el_end = el_start + el_len - 1
+
+    ll_start = el_end + 1
+    ll_end = cycle_length
+
+    return {
+        'EF': range(ef_start, ef_end + 1),
+        'LF': range(lf_start, lf_end + 1),
+        'OV': range(ov_start, ov_end + 1),
+        'EL': range(el_start, el_end + 1),
+        'LL': range(ll_start, ll_end + 1),
+    }
+
+
+def day_match_score(day, phase, phase_day_ranges):
+    """
+    Calculates a score indicating how well a given day aligns with the expected day range for a specific phase.
+
+    If the day falls within the day range associated with the given phase, the score is 1.0.
+    Otherwise, the score decreases linearly by 0.2 for each day of distance from the closest day in the range,
+    with a minimum score of 0.0.
+
+    Parameters:
+        day (int): The day to evaluate.
+        phase (str): The name of the phase whose day range should be used for comparison.
+        phase_day_ranges (dict): Dictionary mapping phase names to ranges of days.
+
+    Returns:
+        float: A score between 0.0 and 1.0 indicating how closely the day matches the expected phase day range.
+    """
+    if day in phase_day_ranges[phase]:
+        return 1.0
+    else:
+        min_dist = min(abs(day - d) for d in phase_day_ranges[phase])
+        return max(0.0, 1 - 0.2 * min_dist)
