@@ -103,7 +103,7 @@ import pandas as pd
 cycle_length = 28
 df = pd.read_csv(f'csv_files/day_mucus_combinations_cycle_length_{cycle_length}.csv')  # Adjust path if needed
 # Apply the function to each row
-df['prrerdicted_phase'] = df.apply(
+df['predicted_phase'] = df.apply(
     lambda row: classify_phase(
         mucus_today=row['today_mucus'],
         cycle_day=row['day'],
@@ -113,4 +113,4 @@ df['prrerdicted_phase'] = df.apply(
 )
 
 # Save the result to a new CSV
-df.to_csv(f'csv_files/day_mucus_combinations_with_phase_cycle_length_{cycle_length}.csv', index=False)
+df.to_csv(f'csv_files/day_mucus_combinations_with_predicted_phase_cycle_length_{cycle_length}.csv', index=False)
