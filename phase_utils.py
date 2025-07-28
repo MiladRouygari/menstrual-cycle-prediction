@@ -95,3 +95,105 @@ def day_match_score(day, phase, phase_day_ranges):
     else:
         min_dist = min(abs(day - d) for d in phase_day_ranges[phase])
         return max(0.0, 1 - 0.2 * min_dist)
+    
+
+def get_stage(cycle_day: int, cycle_length: int) -> str:
+    
+    """
+    Determine the menstrual cycle stage based on the given cycle day and cycle length.
+
+    This function categorizes the current stage of a menstrual cycle into one of three phases:
+    'pre-ovulation', 'ovulation', or 'post-ovulation', based on mappings between the cycle length
+    and estimated ovulation window.
+
+    Parameters:
+        cycle_day (int): The current day in the menstrual cycle
+        cycle_length (int): The total length of the menstrual cycle (must be between 23 and 35 inclusive).
+
+    Returns:
+        str: The stage of the menstrual cycle, one of 'pre-ovulation', 'ovulation', or 'post-ovulation'.
+    """
+
+    # Ovulation stage mapping
+    # Mapping of cycle length to corresponding ovulation window (start day, end day)
+    ovulation_stage_days = {
+        23: (7, 16),
+        24: (8, 16),
+        25: (9, 16),
+        26: (10, 17),
+        27: (11, 18),
+        28: (12, 19),
+        29: (13, 19),
+        30: (14, 20),
+        31: (15, 22),
+        32: (16, 22),
+        33: (17, 23),
+        34: (18, 24),
+        35: (18, 25),
+    }
+
+    # Retrieve the ovulation window based on the given cycle length
+    start_ov, end_ov = ovulation_stage_days[cycle_length]
+
+    # Determine the stage based on the current cycle day
+    if cycle_day < start_ov:
+        return 'pre-ovulation'
+    elif start_ov <= cycle_day <= end_ov:
+        return 'ovulation'
+    else:
+        return 'post-ovulation'
+
+
+def get_weights(cycle_day: int, cycle_length: int) -> dict:
+    
+    """
+    Return the cervical mucus scoring weights based on the appropriate stage (pre-, ovulation, post-ovulation) 
+    of the menstrual cycle.
+    
+    This function determines the current stage of the cycle using the given cycle day and cycle length,
+    and returns a dictionary of mucus types mapped to their corresponding weights during that stage.
+
+    The weights are organized as follows:
+        - For 'pre-ovulation': Emphasizes early Follicular (EF) and Late Follicular (LF).
+        - For 'ovulation': Emphasizes ovulation (OV) and transition phases (EL, LL).
+        - For 'post-ovulation': Primarily maps to Luteal (EL, LL).
+
+    Parameters:
+        cycle_day (int): The current day in the menstrual cycle.
+        cycle_length (int): The total length of the menstrual cycle.
+
+    Returns:
+        dict: A dictionary mapping mucus types (e.g., 'creamy', 'egg white') to fertility score weights 
+              (e.g., {'EF': 1.0, 'LF': 0.8}), based on the determined stage.
+
+    """
+    # Define weights for each mucus type based on the current stage of the cycle
+    stage_mucus_scores = {
+    'pre-ovulation': {
+        'none': {'EF': 1.0, 'LF': 0.8},
+        'sticky': {'EF': 1.0, 'LF': 0.8},
+        'creamy': {'LF': 1.0},
+        'egg white': {'LF': 0.5},
+        'watery': {},
+    },
+    'ovulation': { # if by mistake they put "None" or "Sticky" they will get EL or LL (solution, divide this into two?)
+        'none': {'EL': 0.7, 'LL': 0.7},
+        'sticky': {'EL': 0.7, 'LL': 0.7},
+        'creamy': {},
+        'egg white': {'OV': 0.7},
+        'watery': {'OV': 1.0},
+    },
+    'post-ovulation': { 
+        'none': {'EL': 0.7, 'LL': 0.7},
+        'sticky': {'EL': 0.7, 'LL': 0.7},
+        'creamy': {},
+        'egg white': {}, # should not appear post-ovulation
+        'watery': {},    # should not appear post-ovulation
+    },
+}
+
+    # Determine the current stage of the cycle
+    stage = get_stage(cycle_day, cycle_length)
+    
+    # Return the corresponding mucus weight dictionary for that stage
+    return stage_mucus_scores.get(stage, {}) 
