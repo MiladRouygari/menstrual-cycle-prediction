@@ -3,18 +3,16 @@ from phase_utils import *
 
 def classify_phase(
     mucus_today,
-    mucus_yesterday,
     cycle_day,
-    cycle_length,
-    mucus_today_weight=0.7,
-    mucus_yesterday_weight=0.5,
+    cycle_length=28,
+    mucus_today_weight=1,
     mucus_vs_day_weight=0.5  
 ):
     """
     Estimates the most likely menstrual cycle phase based on cervical mucus observations and cycle day.
 
     This function combines two scoring methods:
-    1. Mucus-based scoring: Evaluates how typical the current and previous day's cervical mucus 
+    1. Mucus-based scoring: Evaluates how typical the current day's cervical mucus 
        types are for each phase.
     2. Day-based scoring: Assesses how well the current cycle day aligns with typical timing of each phase.
 
@@ -22,11 +20,9 @@ def classify_phase(
 
     Parameters:
         mucus_today (str): Type of cervical mucus observed today (e.g., 'none', 'sticky', 'creamy', 'egg white', 'watery').
-        mucus_yesterday (str): Type of cervical mucus observed yesterday.
         cycle_day (int): Current day in the menstrual cycle.
         cycle_length (int): Total length of the cycle.
-        mucus_today_weight (float, optional): Weight of today's mucus in the mucus score. Defaults to 0.7.
-        mucus_yesterday_weight (float, optional): Weight of yesterday's mucus in the mucus score. Defaults to 0.5.
+        mucus_today_weight (float, optional): Weight of today's mucus in the mucus score. Defaults to 1.
         mucus_vs_day_weight (float, optional): Relative weight of mucus vs. day score in total score. Defaults to 0.5.
 
     Returns:
@@ -37,20 +33,11 @@ def classify_phase(
     Notes:
         - The function currently returns only the top-scoring phase. To enable debug information,
           uncomment the detailed return dictionary at the bottom of the function.
-
-    Example:
-        >>> classify_phase('creamy', 'sticky', cycle_day=12, ,cycle_length=30)
-        'LF'
     """
-    # Define how different types of cervical mucus are associated with each phase
-    # Scores indicate how typical each mucus type is for each phase
-    mucus_phase_scores = {
-        'none':     {'EF': 1.0, 'OV': 0.2, 'EL': 0.7, 'LL': 0.7},
-        'sticky':   {'EF': 1.0, 'LF': 1.0, 'OV': 0.2, 'EL': 0.7, 'LL': 0.7},
-        'creamy':   {'LF': 1.0, 'LF': 0.5},
-        'egg white':{'OV': 1.0, 'LF': 0.3},
-        'watery':   {'OV': 1.0},
-    }
+
+    # Scores how different types of cervical mucus are associated with each stage
+    mucus_phase_scores = get_weights(cycle_day, cycle_length)
+    #print(mucus_phase_scores) # Debug print
 
     # Get day ranges for each phase based on the cycle length
     phase_day_ranges = get_phase_day_ranges(cycle_length)
@@ -63,12 +50,10 @@ def classify_phase(
     # Compute a score for each phase based on mucus and day matching
     for phase in phase_day_ranges:
         mt_score = mucus_phase_scores.get(mucus_today, {}).get(phase, 0.0)
-        my_score = mucus_phase_scores.get(mucus_yesterday, {}).get(phase, 0.0)
 
-        # Weighted mucus score using today's and yesterday's mucus
+        # Weighted mucus score using today's mucus
         mucus_score = (
-            mucus_today_weight * mt_score +
-            mucus_yesterday_weight * my_score
+            mucus_today_weight * mt_score
         )
         # How well the current day aligns with the given phase
         d_score = day_match_score(cycle_day, phase, phase_day_ranges)
@@ -85,14 +70,11 @@ def classify_phase(
         # Save individual scores for analysis
         score_breakdown[phase] = {
             "mt_score": mt_score,
-            "my_score": my_score,
             "d_score": round(d_score, 2),
             "mucus_score": round(mucus_score, 2),
             "total_score": round(total_score, 2)
         }
 
-    # if not phase_scores:
-    #     return {"phase": "Unknown", "confidence": 0.0, "scores": {}}
 
     best_phase = max(phase_scores, key=phase_scores.get)
 
@@ -101,16 +83,34 @@ def classify_phase(
     
     # debugging purpose 
     # Optional: return more detailed information for debugging
-    # return {
-    #     "phase": best_phase,
-    #     "confidence": round(phase_scores[best_phase], 2),
-    #     "scores": score_breakdown
-    # }
+    return {
+        "phase": best_phase,
+        "confidence": round(phase_scores[best_phase], 2),
+        "scores": score_breakdown
+    }
 
 # Example usage
 print(classify_phase(
-    mucus_today='None',
-    mucus_yesterday='None',
-    cycle_day=1,
-    cycle_length=35)
-    )
+    mucus_today='none',
+    cycle_day=8,
+    cycle_length=23
+))
+
+###### Testing all the possible combinatinons of day and mucuses (5 per day) ######
+import pandas as pd
+
+# Load the CSV file
+cycle_length = 28
+df = pd.read_csv(f'csv_files/day_mucus_combinations_cycle_length_{cycle_length}.csv')  # Adjust path if needed
+# Apply the function to each row
+df['prrerdicted_phase'] = df.apply(
+    lambda row: classify_phase(
+        mucus_today=row['today_mucus'],
+        cycle_day=row['day'],
+        cycle_length=cycle_length
+    ),
+    axis=1
+)
+
+# Save the result to a new CSV
+df.to_csv(f'csv_files/day_mucus_combinations_with_phase_cycle_length_{cycle_length}.csv', index=False)
