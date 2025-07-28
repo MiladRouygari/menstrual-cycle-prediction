@@ -1,0 +1,141 @@
+day,today_mucus,prrerdicted_phase
+1,none,EF
+1,sticky,EF
+1,creamy,EF
+1,egg white,EF
+1,watery,EF
+2,none,EF
+2,sticky,EF
+2,creamy,EF
+2,egg white,EF
+2,watery,EF
+3,none,EF
+3,sticky,EF
+3,creamy,EF
+3,egg white,EF
+3,watery,EF
+4,none,EF
+4,sticky,EF
+4,creamy,LF
+4,egg white,EF
+4,watery,EF
+5,none,EF
+5,sticky,EF
+5,creamy,LF
+5,egg white,EF
+5,watery,EF
+6,none,EF
+6,sticky,EF
+6,creamy,LF
+6,egg white,LF
+6,watery,EF
+7,none,EF
+7,sticky,EF
+7,creamy,LF
+7,egg white,LF
+7,watery,EF
+8,none,EF
+8,sticky,EF
+8,creamy,LF
+8,egg white,LF
+8,watery,LF
+9,none,LF
+9,sticky,LF
+9,creamy,LF
+9,egg white,LF
+9,watery,LF
+10,none,LF
+10,sticky,LF
+10,creamy,LF
+10,egg white,LF
+10,watery,LF
+11,none,LF
+11,sticky,LF
+11,creamy,LF
+11,egg white,LF
+11,watery,LF
+12,none,OV
+12,sticky,OV
+12,creamy,OV
+12,egg white,OV
+12,watery,OV
+13,none,OV
+13,sticky,OV
+13,creamy,OV
+13,egg white,OV
+13,watery,OV
+14,none,EL
+14,sticky,EL
+14,creamy,OV
+14,egg white,OV
+14,watery,OV
+15,none,EL
+15,sticky,EL
+15,creamy,OV
+15,egg white,OV
+15,watery,OV
+16,none,EL
+16,sticky,EL
+16,creamy,OV
+16,egg white,OV
+16,watery,OV
+17,none,EL
+17,sticky,EL
+17,creamy,EL
+17,egg white,OV
+17,watery,OV
+18,none,EL
+18,sticky,EL
+18,creamy,EL
+18,egg white,OV
+18,watery,OV
+19,none,EL
+19,sticky,EL
+19,creamy,EL
+19,egg white,OV
+19,watery,OV
+20,none,EL
+20,sticky,EL
+20,creamy,EL
+20,egg white,EL
+20,watery,EL
+21,none,EL
+21,sticky,EL
+21,creamy,EL
+21,egg white,EL
+21,watery,EL
+22,none,LL
+22,sticky,LL
+22,creamy,LL
+22,egg white,LL
+22,watery,LL
+23,none,LL
+23,sticky,LL
+23,creamy,LL
+23,egg white,LL
+23,watery,LL
+24,none,LL
+24,sticky,LL
+24,creamy,LL
+24,egg white,LL
+24,watery,LL
+25,none,LL
+25,sticky,LL
+25,creamy,LL
+25,egg white,LL
+25,watery,LL
+26,none,LL
+26,sticky,LL
+26,creamy,LL
+26,egg white,LL
+26,watery,LL
+27,none,LL
+27,sticky,LL
+27,creamy,LL
+27,egg white,LL
+27,watery,LL
+28,none,LL
+28,sticky,LL
+28,creamy,LL
+28,egg white,LL
+28,watery,LL
