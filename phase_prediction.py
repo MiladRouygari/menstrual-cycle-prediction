@@ -6,7 +6,7 @@ def classify_phase(
     cycle_day,
     cycle_length=28,
     mucus_today_weight=1,
-    mucus_vs_day_weight=0.5  
+    mucus_vs_day_weight=0.7  
 ):
     """
     Estimates the most likely menstrual cycle phase based on cervical mucus observations and cycle day.
@@ -101,16 +101,18 @@ import pandas as pd
 
 # Load the CSV file
 cycle_length = 28
+mucus_vs_day_weight=0.5
 df = pd.read_csv(f'csv_files/day_mucus_combinations_cycle_length_{cycle_length}.csv')  # Adjust path if needed
 # Apply the function to each row
 df['predicted_phase'] = df.apply(
     lambda row: classify_phase(
         mucus_today=row['today_mucus'],
         cycle_day=row['day'],
-        cycle_length=cycle_length
+        cycle_length=cycle_length,
+        mucus_vs_day_weight=mucus_vs_day_weight
     ),
     axis=1
 )
 
 # Save the result to a new CSV
-df.to_csv(f'csv_files/day_mucus_combinations_with_predicted_phase_cycle_length_{cycle_length}.csv', index=False)
+df.to_csv(f'csv_files/day_mucus_combinations_with_predicted_phase_cycle_length_{cycle_length}_mucus_vs_day_weight_{mucus_vs_day_weight}.csv', index=False)

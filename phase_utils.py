@@ -172,13 +172,13 @@ def get_weights(cycle_day: int, cycle_length: int) -> dict:
     'pre-ovulation': {
         'none': {'EF': 1.0, 'LF': 0.8},
         'sticky': {'EF': 1.0, 'LF': 0.8},
-        'creamy': {'LF': 1.0},
-        'egg white': {'LF': 0.5},
+        'creamy': {'LF': 0.5},
+        'egg white': {'LF': 0.3},
         'watery': {},
     },
     'ovulation': { # if by mistake they put "None" or "Sticky" they will get EL or LL (solution, divide this into two?)
-        'none': {'EL': 0.7, 'LL': 0.7},
-        'sticky': {'EL': 0.7, 'LL': 0.7},
+        'none': {'EL': 0.5},
+        'sticky': {'EL': 0.5},
         'creamy': {},
         'egg white': {'OV': 0.7},
         'watery': {'OV': 1.0},
@@ -194,6 +194,6 @@ def get_weights(cycle_day: int, cycle_length: int) -> dict:
 
     # Determine the current stage of the cycle
     stage = get_stage(cycle_day, cycle_length)
-    
+
     # Return the corresponding mucus weight dictionary for that stage
     return stage_mucus_scores.get(stage, {}) 
