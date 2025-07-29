@@ -31,4 +31,3 @@ def generate_day_mucus_combinations(cycle_length=28):
     return df
 
 generate_day_mucus_combinations(cycle_length=28)  # You can change the cycle length as needed
-

@@ -176,10 +176,10 @@ def get_weights(cycle_day: int, cycle_length: int) -> dict:
         'egg white': {'LF': 0.3},
         'watery': {},
     },
-    'ovulation': { # if by mistake they put "None" or "Sticky" they will get EL or LL (solution, divide this into two?)
-        'none': {'EL': 0.5},
-        'sticky': {'EL': 0.5},
-        'creamy': {},
+    'ovulation': { # if by mistake they put "None" or "Sticky" they will get EL (solution, divide this into two?)
+        'none': {'LF': 0.4,'EL': 0.5},
+        'sticky': {'LF': 0.4, 'EL': 0.5},
+        'creamy': {'LF': 0.4},
         'egg white': {'OV': 0.7},
         'watery': {'OV': 1.0},
     },
