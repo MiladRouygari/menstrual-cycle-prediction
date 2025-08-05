@@ -46,7 +46,7 @@ def get_phase_day_ranges(cycle_length):
     flexible_len = cycle_length - fixed_len
 
     # Split EF and LF in 7:4 ratio
-    ef_len = round(flexible_len * 7 / 11) # CHECK: round --- if the total EF + LF would be the length of folicular
+    ef_len = round(flexible_len * 7 / 11)
     lf_len = flexible_len - ef_len
 
     # Build the ranges step by step
