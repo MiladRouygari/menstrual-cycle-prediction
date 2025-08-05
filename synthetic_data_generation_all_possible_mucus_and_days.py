@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def generate_day_mucus_combinations(cycle_length=28):
+def generate_day_mucus_combinations(cycle_length):
     """
     Generate all possible combinations of days and mucus types for a menstrual cycle.
     
