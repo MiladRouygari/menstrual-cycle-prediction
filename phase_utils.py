@@ -37,8 +37,8 @@ def get_phase_day_ranges(cycle_length):
     """
     # Fixed phase durations
     ov_len = 5
-    el_len = 5
-    ll_len = 7
+    el_len = 6 
+    ll_len = 6 
     fixed_len = ov_len + el_len + ll_len
 
     
@@ -72,6 +72,22 @@ def get_phase_day_ranges(cycle_length):
         'EL': range(el_start, el_end + 1),
         'LL': range(ll_start, ll_end + 1),
     }
+
+
+def get_phase_lengths(cycle_length):
+    """
+    Returns the length (number of days) of each menstrual cycle phase 
+    based on the provided cycle length.
+
+    Parameters:
+        cycle_length (int): Total number of days in the cycle.
+
+    Returns:
+        dict: A dictionary mapping each phase name ('EF', 'LF', 'OV', 'EL', 'LL') 
+              to the number of days in that phase.
+    """
+    day_ranges = get_phase_day_ranges(cycle_length)
+    return {phase: len(days) for phase, days in day_ranges.items()}
 
 
 def day_match_score(day, phase, phase_day_ranges):
@@ -117,19 +133,19 @@ def get_stage(cycle_day: int, cycle_length: int) -> str:
     # Ovulation stage mapping
     # Mapping of cycle length to corresponding ovulation window (start day, end day)
     ovulation_stage_days = {
-        23: (7, 16),
-        24: (8, 16),
-        25: (9, 16),
-        26: (10, 17),
-        27: (11, 18),
-        28: (12, 19),
-        29: (13, 19),
-        30: (14, 20),
-        31: (15, 22),
-        32: (16, 22),
-        33: (17, 24),
+        23: (7, 13), # the first interation was (7,17)
+        24: (8, 14), 
+        25: (9, 15), 
+        26: (10, 16), 
+        27: (11, 17), 
+        28: (12, 18), 
+        29: (13, 19), 
+        30: (14, 20), 
+        31: (15, 21), 
+        32: (16, 22), 
+        33: (17, 23), 
         34: (18, 24),
-        35: (18, 25),
+        35: (18, 25), 
     }
 
     # Retrieve the ovulation window based on the given cycle length
@@ -174,9 +190,9 @@ def get_weights(cycle_day: int, cycle_length: int) -> dict:
         'sticky': {'EF': 1.0, 'LF': 0.8},
         'creamy': {'LF': 0.5},
         'egg white': {'LF': 0.3},
-        'watery': {},
+        'watery': {'EF': 0.4, 'LF': 0.7}, 
     },
-    'ovulation': { # if by mistake they put "None" or "Sticky" they will get EL (solution, divide this into two?)
+    'ovulation': { # if by "mistake" they put "None" or "Sticky" they will get EL
         'none': {'LF': 0.4,'EL': 0.5},
         'sticky': {'LF': 0.4, 'EL': 0.5},
         'creamy': {'LF': 0.4},
@@ -187,8 +203,8 @@ def get_weights(cycle_day: int, cycle_length: int) -> dict:
         'none': {'EL': 0.7, 'LL': 0.7},
         'sticky': {'EL': 0.7, 'LL': 0.7},
         'creamy': {},
-        'egg white': {}, # should not appear post-ovulation
-        'watery': {},    # should not appear post-ovulation
+        'egg white': {'OV': 1.0,'EL': 0.5, 'LL': 0.5}, # OV have some weights so the first days of post-ovulation stage could potentially be OV
+        'watery': {'OV': 1.0, 'EL': 0.5, 'LL': 0.5},    
     },
 }
 
@@ -197,3 +213,33 @@ def get_weights(cycle_day: int, cycle_length: int) -> dict:
 
     # Return the corresponding mucus weight dictionary for that stage
     return stage_mucus_scores.get(stage, {}) 
+
+
+def consistent_phase(prev_phase, today_phase):
+    """
+    Returns the more consistent phase between a previous day's phase and today's predicted phase,
+    based on a predefined sequential order of phases.
+
+    Phases must either stay the same or progress forward. Any backward steps are 
+    considered inconsistent, and the previous phase is returned.
+
+    IMPORTANT: Jumps are possible!! (e.g, two or more step forward, 'EF' to 'OV')
+
+    Parameters:
+        prev_phase (str): The predicted phase from the previous day.
+        today_phase (str): The predicted phase for today.
+
+    Returns:
+        str: The consistent phase, either the same as or one step after the previous phase.
+    """
+    phase_order = ['EF', 'LF', 'OV', 'EL', 'LL']
+    prev_index = phase_order.index(prev_phase)
+    today_index = phase_order.index(today_phase)
+
+    if today_index >= prev_index:
+        return today_phase
+    else:
+        return prev_phase
+
+
+
