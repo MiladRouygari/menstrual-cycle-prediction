@@ -91,16 +91,16 @@ def classify_phase(
 
 # Example usage
 print(classify_phase(
-    mucus_today='none',
+    mucus_today=' ',
     cycle_day=8,
-    cycle_length=23
+    cycle_length=28
 ))
 
 ###### Testing all the possible combinatinons of day and mucuses (5 per day) ######
 import pandas as pd
 
 # Load the CSV file
-cycle_length=28
+cycle_length=35
 mucus_vs_day_weight=0.5
 df = pd.read_csv(f'csv_files/day_mucus_combinations_cycle_length_{cycle_length}.csv')  # Adjust path if needed
 # Apply the function to each row
