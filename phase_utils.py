@@ -237,9 +237,12 @@ def consistent_phase(prev_phase, today_phase):
     today_index = phase_order.index(today_phase)
 
     if today_index >= prev_index:
-        return today_phase
+        return phase_order[min(prev_index + 1, today_index)]
     else:
         return prev_phase
 
 
+
+
+    
 
