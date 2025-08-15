@@ -223,7 +223,8 @@ def consistent_phase(prev_phase, today_phase):
     Phases must either stay the same or progress forward. Any backward steps are 
     considered inconsistent, and the previous phase is returned.
 
-    IMPORTANT: Jumps are possible!! (e.g, two or more step forward, 'EF' to 'OV')
+    IMPORTANT: If the phase advances by two or more steps (e.g., 'LF' to 'EL'), 
+    the function will return the intermediate phase that represents the last valid one-step progression — in this example, 'OV'
 
     Parameters:
         prev_phase (str): The predicted phase from the previous day.
