@@ -6,7 +6,7 @@ def classify_phase(
     cycle_day,
     cycle_length=28,
     mucus_today_weight=1,
-    mucus_vs_day_weight=0.5  
+    mucus_vs_day_weight=0.6  
 ):
     """
     Estimates the most likely menstrual cycle phase based on cervical mucus observations and cycle day.
