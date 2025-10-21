@@ -74,22 +74,6 @@ def get_phase_day_ranges(cycle_length):
     }
 
 
-def get_phase_lengths(cycle_length):
-    """
-    Returns the length (number of days) of each menstrual cycle phase 
-    based on the provided cycle length.
-
-    Parameters:
-        cycle_length (int): Total number of days in the cycle.
-
-    Returns:
-        dict: A dictionary mapping each phase name ('EF', 'LF', 'OV', 'EL', 'LL') 
-              to the number of days in that phase.
-    """
-    day_ranges = get_phase_day_ranges(cycle_length)
-    return {phase: len(days) for phase, days in day_ranges.items()}
-
-
 def day_match_score(day, phase, phase_day_ranges):
     """
     Calculates a score indicating how well a given day aligns with the expected day range for a specific phase.
