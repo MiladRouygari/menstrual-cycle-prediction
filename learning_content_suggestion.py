@@ -42,7 +42,7 @@ def learning_content(
 # Examples
 # -------------------------
 
-print(learning_content("EF", 1))
-print(learning_content("EF", 7))
-print(learning_content("EF", 8))
-print(learning_content("LF", 8))
+# print(learning_content("EF", 1))
+# print(learning_content("EF", 7))
+# print(learning_content("EF", 8))
+# print(learning_content("LF", 8))
