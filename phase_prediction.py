@@ -83,11 +83,11 @@ def classify_phase(
     
     # debugging purpose 
     # Optional: return more detailed information for debugging
-    return {
-        "phase": best_phase,
-        "confidence": round(phase_scores[best_phase], 2),
-        "scores": score_breakdown
-    }
+    # return {
+    #     "phase": best_phase,
+    #     "confidence": round(phase_scores[best_phase], 2),
+    #     "scores": score_breakdown
+    # }
 
 # Example usage
 # print(classify_phase(
