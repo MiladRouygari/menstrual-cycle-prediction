@@ -45,7 +45,7 @@ def classify_phase(
     
     # # Dictionaries to store final scores and intermediate breakdowns
     phase_scores = {}
-    score_breakdown = {}  # dictionary to store mt, my, d scores / For diagnostics and debugging
+    #score_breakdown = {}  # dictionary to store mt, my, d scores / For diagnostics and debugging
 
     # Compute a score for each phase based on mucus and day matching
     for phase in phase_day_ranges:
@@ -68,12 +68,12 @@ def classify_phase(
         phase_scores[phase] = total_score
 
         # Save individual scores for analysis
-        score_breakdown[phase] = {
-            "mt_score": mt_score,
-            "d_score": round(d_score, 2),
-            "mucus_score": round(mucus_score, 2),
-            "total_score": round(total_score, 2)
-        }
+        # score_breakdown[phase] = {
+        #    "mt_score": mt_score,
+        #    "d_score": round(d_score, 2),
+        #    "mucus_score": round(mucus_score, 2),
+        #    "total_score": round(total_score, 2)
+        # }
 
 
     best_phase = max(phase_scores, key=phase_scores.get)
@@ -90,29 +90,29 @@ def classify_phase(
     }
 
 # Example usage
-print(classify_phase(
-    mucus_today=' ',
-    cycle_day=8,
-    cycle_length=28
-))
+# print(classify_phase(
+#     mucus_today=' ',
+#     cycle_day=8,
+#     cycle_length=28
+# ))
 
-###### Testing all the possible combinatinons of day and mucuses (5 per day) ######
-import pandas as pd
+# ###### Testing all the possible combinatinons of day and mucuses (5 per day) ######
+# import pandas as pd
 
-# Load the CSV file
-cycle_length=35
-mucus_vs_day_weight=0.5
-df = pd.read_csv(f'csv_files/day_mucus_combinations_cycle_length_{cycle_length}.csv')  # Adjust path if needed
-# Apply the function to each row
-df['predicted_phase'] = df.apply(
-    lambda row: classify_phase(
-        mucus_today=row['today_mucus'],
-        cycle_day=row['day'],
-        cycle_length=cycle_length,
-        mucus_vs_day_weight=mucus_vs_day_weight
-    ),
-    axis=1
-)
+# # Load the CSV file
+# cycle_length=35
+# mucus_vs_day_weight=0.5
+# df = pd.read_csv(f'csv_files/day_mucus_combinations_cycle_length_{cycle_length}.csv')  # Adjust path if needed
+# # Apply the function to each row
+# df['predicted_phase'] = df.apply(
+#     lambda row: classify_phase(
+#         mucus_today=row['today_mucus'],
+#         cycle_day=row['day'],
+#         cycle_length=cycle_length,
+#         mucus_vs_day_weight=mucus_vs_day_weight
+#     ),
+#     axis=1
+# )
 
-# Save the result to a new CSV
-df.to_csv(f'csv_files/day_mucus_combinations_with_predicted_phase_cycle_length_{cycle_length}_mucus_vs_day_weight_{mucus_vs_day_weight}.csv', index=False)
+# # Save the result to a new CSV
+# df.to_csv(f'csv_files/day_mucus_combinations_with_predicted_phase_cycle_length_{cycle_length}_mucus_vs_day_weight_{mucus_vs_day_weight}.csv', index=False)
