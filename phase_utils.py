@@ -12,8 +12,8 @@ def get_phase_day_ranges(cycle_length):
 
     Fixed durations:
         - OV (Ovulation): 5 days
-        - EL (Early Luteal): 5 days
-        - LL (Late Luteal): 7 days
+        - EL (Early Luteal): 6 days
+        - LL (Late Luteal): 6 days
 
     The remaining days (after allocating OV, EL, and LL) are flexibly distributed between EF and LF 
     in a 7:4 ratio.
