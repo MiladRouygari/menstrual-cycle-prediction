@@ -5,10 +5,10 @@ from phase_utils import consistent_phase
 
 def predict_phase_day_and_content(
     mucus_today: str,
-    cycle_day: int, # Today’s cycle day (1..cycle_length; may exceed for irregular cycles)
-    prev_day_in_phase: int, # Days spent in the *previous* phase up to yesterday
+    cycle_day: int, 
+    prev_day_in_phase: int, 
     cycle_length: int = 28,
-    prev_phase: str | None = None, # Phase predicted yesterday (None if unknown)
+    prev_phase: str | None = None,
     mucus_today_weight: float = 1.0,
     mucus_vs_day_weight: float = 0.6,
 ):
@@ -33,6 +33,7 @@ def predict_phase_day_and_content(
         Valid values must match what `classify_phase` expects.
     cycle_day : int
         Today's cycle day. May exceed `cycle_length` for irregular cycles.
+        App is responsible for wrapping/validating out-of-range days before use
     prev_day_in_phase : int
         The number of days spent in the *previous* phase as of yesterday (>= 1).
         This is used to increment the counter if the phase remains the same today.
